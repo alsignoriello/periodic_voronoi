@@ -45,5 +45,7 @@ polygons.txt
 # Requirements
 
 numpy (1.8.1)
+
 matplotlib (1.3.1)
+
 scipy (0.14.0)

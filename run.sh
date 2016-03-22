@@ -14,11 +14,11 @@ cd $folder
 # python $HOME/voronoi.py $N
 
 # plot voronoi diagram
-python $HOME/plot.py "voronoi.jpg"
+# python $HOME/plot.py "voronoi.jpg"
 
 
 # run voronoi diagram with periodic boundaries
-
+python $HOME/periodic_voronoi.py $N
 
 # plot voronoi diagram
 
