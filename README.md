@@ -29,6 +29,8 @@ Periodic boundary conditions assume that when you reach the maximum length of a 
 
 
 
+sh run.sh [N]
+
 
 vertices.txt
 (x,y) coordinates for every vertex in the voronoi diagram
@@ -40,11 +42,8 @@ polygons.txt
 (index0, index1, ... indexN) indices in counter-clockwise order that form every polygon in the voronoi diagram
 
 
-# Notes
-
-
-
-
 # Requirements
 
-
+numpy (1.8.1)
+matplotlib (1.3.1)
+scipy (0.14.0)
