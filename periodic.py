@@ -17,8 +17,6 @@ def get_vertices(tile_vertices):
 	return np.array(vertices), index_map
 
 
-
-
 # get edges with respect to periodic boundaries
 # vertices and edges are from voronoi with tiled coordinates
 def get_edges(vertices, edges, index_map):
@@ -126,6 +124,30 @@ def get_new_index_map(vertices, v, index_map):
 	return index_map
 
 
+
+
+def check_counter(vertices, poly):
+	sumEdges = 0
+
+	for i,index in enumerate(poly):
+
+		x1,y1 = vertices[index]
+
+		if i == len(poly) - 1:
+			x2,y2 = vertices[poly[0]]
+		else:
+			x2,y2 = vertices[poly[i+1]]
+
+		sumEdges += (x2 - x1) * (y2 + y1) 
+
+	if sumEdges < 0:
+		return True
+
+	if sumEdges >= 0:
+		return False
+
+
+
 # get polygons
 def get_polygons(regions, index_map, vertices):
 
@@ -139,7 +161,7 @@ def get_polygons(regions, index_map, vertices):
 				count += 1
 				poly.append(index_map[index])
 		if count == len(region) and count != 0:
-			polygons.append(cell)
+			polygons.append(poly)
 
 
 	# remove duplicates
@@ -151,6 +173,13 @@ def get_polygons(regions, index_map, vertices):
 				add = False
 		if add == True:
 			new_polygons.append(poly)
+
+
+	# check counter clockwise order
+	for i,poly in enumerate(polygons):
+		cc = check_counter(vertices, poly)
+		if cc == False:
+			polygons[i] = poly.reverse()
 
 
 	return new_polygons

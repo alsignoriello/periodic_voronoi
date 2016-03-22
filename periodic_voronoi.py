@@ -25,8 +25,7 @@ vertices, index_map = get_vertices(tile_vertices)
 
 # get edges
 tile_edges = vor.ridge_vertices
-edges = get_edges(vertices, tile_edges, index_map)
-
+edges = get_edges(tile_vertices, tile_edges, index_map)
 
 # get polygons
 # new index map finds the points that are just outside the box
@@ -37,7 +36,6 @@ index_map = get_new_index_map(tile_vertices, vertices, index_map)
 # polygons in tiled vertices
 regions = vor.regions
 polygons = get_polygons(regions, index_map, vertices)
-
 
 # write vertices
 np.savetxt("periodic_vertices.txt", vertices) 
