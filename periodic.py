@@ -2,6 +2,11 @@
 import numpy as np
 
 
+# Difference with respect to periodic boundaries
+def periodic_diff(v1, v2, L):
+	return ((v1 - v2 + L/2.) % L) - L/2.
+
+
 # get vertices inside original bounds
 # assumes box length is 1
 def get_vertices(tile_vertices):
@@ -114,7 +119,6 @@ def get_new_index_map(vertices, v, index_map):
 		if y > 1 and y < 2.:
 			y1 = y - 1.
 
-
 		# look up new x,y in list
 		for j,(x2,y2) in enumerate(v):
 			if abs(x1 - x2) < 10**-6:
@@ -138,6 +142,11 @@ def check_counter(vertices, poly):
 		else:
 			x2,y2 = vertices[poly[i+1]]
 
+		v1 = np.array([x1,y1])
+		v2 = np.array([x2,y2])
+		L = np.array([1.,1.])
+		v_next = v1 + periodic_diff(v2, v1, L)
+		x2,y2 = v_next
 		sumEdges += (x2 - x1) * (y2 + y1) 
 
 	if sumEdges < 0:
@@ -145,6 +154,36 @@ def check_counter(vertices, poly):
 
 	if sumEdges >= 0:
 		return False
+
+	return True
+
+
+# check if lists are the same order, but not necessarily
+# indexed the same
+def same_list(list1, list2):
+
+	i0 = list1[0]
+
+	i02 = -1
+	for i,index in enumerate(list2):
+		if i0 == index:
+			i02 = i
+
+	if i02 == -1:
+		return False
+
+	if i02 != -1:
+		i2 = i02
+		for i in range(0,len(list1)):
+
+			if list1[i] != list2[i2]:
+				return False
+
+			i2 += 1
+			if i2 >= len(list2):
+				i2 = 0
+
+		return True
 
 
 
@@ -163,23 +202,34 @@ def get_polygons(regions, index_map, vertices):
 		if count == len(region) and count != 0:
 			polygons.append(poly)
 
+	# assure all polygons in counter-clockwise order
+	# This is not working yet because need to use periodic difference
+
+	for i,poly in enumerate(polygons):
+		cc = check_counter(vertices, poly)
+		if cc == False:
+			rev_poly = []
+			for index in reversed(poly):
+				rev_poly.append(index)
+			polygons[i] = rev_poly
 
 	# remove duplicates
 	new_polygons = []
 	for poly in polygons:
 		add = True
 		for poly2 in new_polygons:
-			if sorted(poly) == sorted(poly2):
-				add = False
+			if len(poly) == len(poly2):
+				# check if they are the same ordered list
+				same = same_list(poly, poly2)
+				if same == True:
+					add = False
 		if add == True:
 			new_polygons.append(poly)
 
-
-	# check counter clockwise order
-	for i,poly in enumerate(polygons):
-		cc = check_counter(vertices, poly)
-		if cc == False:
-			polygons[i] = poly.reverse()
-
-
 	return new_polygons
+
+
+
+
+
+

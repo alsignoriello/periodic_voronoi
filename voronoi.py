@@ -11,7 +11,7 @@ np.random.seed([1938420])
 N = int(sys.argv[1])
 
 # generate random points
-points = np.random.uniform(0,1, size=(N,2))
+points = np.random.uniform(0, 1, size=(N,2))
 
 # generate voronoi diagram
 vor = Voronoi(points)

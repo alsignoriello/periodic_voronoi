@@ -4,8 +4,6 @@ import matplotlib.pyplot as plt
 import sys
 
 
-	
-
 # Difference with respect to periodic boundaries
 def periodic_diff(v1, v2, L):
 	return ((v1 - v2 + L/2.) % L) - L/2.
@@ -20,11 +18,12 @@ def periodic_plot(x1,y1,x2,y2,color):
 	v2 = v1 + periodic_diff(v2, v1, L)
 	x2,y2 = v2
 	plt.plot([x1,x2], [y1,y2], c=color)
-	
-	v2 = np.array((x2,y2))
-	v1 = v2 + periodic_diff(v1, v2, L)
-	x1,y1 = v1
-	plt.plot([x1,x2], [y1,y2], c=color)
+
+	# v2 = np.array((x2,y2))
+	# v1 = v2 + periodic_diff(v1, v2, L)
+	# x1,y1 = v1
+	# plt.plot([x1,x2], [y1,y2], c=color)
+
 
 	return 
 
@@ -46,6 +45,7 @@ def plot_edges(vertices, edges):
 
 
 def plot_polygons(vertices, polys):
+
 	for poly in polys:
 		for i,index in enumerate(poly):
 
@@ -53,12 +53,12 @@ def plot_polygons(vertices, polys):
 				if index != -1 and poly[0] != -1:
 					x1,y1 = vertices[index]
 					x2,y2 = vertices[poly[0]]
-					periodic_plot(x1,y1,x2,y2,"r")
+					periodic_plot(x1,y1,x2,y2,"m")
 			else:
 				if index != -1 and poly[i+1] != -1:
 					x1,y1 = vertices[index]
 					x2,y2 = vertices[poly[i+1]]
-					periodic_plot(x1,y1,x2,y2,"r")
+					periodic_plot(x1,y1,x2,y2,"m")
 	return
 
 def save_plot(outfile):
@@ -107,7 +107,8 @@ polys = read_poly(poly_file)
 
 plot_points(vertices)
 plot_polygons(vertices, polys)
-# plot_edges(vertices, edges)
+plot_edges(vertices, edges)
+
 
 save_plot(outfile)
 

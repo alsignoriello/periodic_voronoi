@@ -70,6 +70,7 @@ vertex_file = "vertices.txt"
 edge_file = "edges.txt"
 poly_file = "polygons.txt"
 
+
 vertices = np.loadtxt(vertex_file)
 edges = np.loadtxt(edge_file, dtype=int)
 polys = read_poly(poly_file)
